@@ -40,10 +40,19 @@ The **Smart Greenhouse System** is a project under development. It aims to autom
 - Expanding renewable energy sources for powering the system.
 
 ## Contributors  
-- 2021E013  
-- 2021E027  
-- 2021E081  
-- 2021E124  
-- 2021E126  
 
+Arlaka Fernando	2021/E/081  	•	Handle hardware component integration.
+                                 •	Ensure proper sensor and actuator connections, and manage testing/calibration.
+                                 
+Lukmasinghe R.	2021/E/126	      •	Create the embedded firmware for ESP32, enabling Wi-Fi/Bluetooth communication.
+                                 •	Develop APIs for sensor data transmission and actuator commands.
+                                 
+Bandara D.M.H.B	2021/E/027	   •	Design and assemble the PCB for the system.
+                                 •	Manage power supply circuits and optimize ESP32 with connected peripherals.
+                                 
+Rajamuni R.D.D.S	2021/E/124	   •	Develop software for interfacing with temperature, humidity, and soil moisture sensors.
+                                 •	Implement algorithms for data collection and actuator control.
+                                 
+Ekanayake A.J.K	2021/E/013	   •	Design and implement a user interface for real-time monitoring.
+                                 •	Integrate cloud storage and analytics for system insights.
 
