@@ -26,7 +26,7 @@ The **Smart Greenhouse System** is a project under development. It aims to autom
    git clone https://github.com/yourusername/smart-greenhouse-system.git  
    ```  
 2. Set up the hardware and connect sensors to the ESP32 chip.  
-3. Upload the C code to the ESP32 using a suitable IDE (e.g., Arduino IDE).  
+3. Upload the C code to the ESP32 using a suitable IDE.  
 4. Power up the system and start monitoring and controlling the environment.
 
 ## How It Works (Planned)  
