@@ -1,0 +1,1 @@
+ninja: error: 'E:/uni docs academic/6sem/me/embedded/MINI PROJECT/smart_green_house/main/smart_green_house.c', needed by 'esp-idf/main/CMakeFiles/__idf_main.dir/smart_green_house.c.obj', missing and no known rule to make it

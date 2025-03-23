@@ -1,0 +1,11 @@
+{
+  "SmartGreenHouse": {
+    "Temperature": "30.30",
+    "Humidity": "65",
+    "SoilMoisture": "19.12",
+    "LEDStatus": true,
+    "FanStatus": true,
+    "PumpStatus": true,
+    "MotionDetected": false
+  }
+}
