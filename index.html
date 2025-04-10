@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Greenhouse Dashboard</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("https://housing.com/news/wp-content/uploads/2022/11/green-house-feature-compressed.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        header {
+            background-color: #1b5e20;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        .card {
+            background: rgb(255, 255, 255);
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        select,
+        button {
+            padding: 14px 22px;
+            border-radius: 10px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button {
+            background-color: #1b5e20;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #104e15;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Smart Greenhouse Dashboard
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            
+          <!-- Temperature Card -->
+          <div class="card">
+              <img src="https://th.bing.com/th/id/OIP.rI_ZjMJ0hBaWWG64hmSesQHaH_" alt="Temperature">
+              <p><strong>Temperature:</strong> <span id="temp">--</span></p>
+          </div>
+
+          <!-- Humidity Card -->
+          <div class="card">
+              <img src="https://th.bing.com/th/id/OIP.oGJYZpULUNSfaSlI0LjsiwHaHa" alt="Humidity">
+              <p><strong>Humidity:</strong> <span id="hum">--</span></p>
+          </div>
+
+          <!-- Soil Moisture Card -->
+          <div class="card">
+              <img src="https://th.bing.com/th/id/OIP.F_32FvdEJ4PPzucHLyvYEgHaHa" alt="Moisture">
+              <p><strong>Moisture:</strong> <span id="soil">--</span></p>
+          </div>
+
+          <!-- Light Card -->
+          <div class="card">
+              <img src="https://static.vecteezy.com/system/resources/previews/016/806/025/original/download-a-customizable-flat-icon-of-light-vector.jpg" alt="Light">
+              <p><strong>Light:</strong> <span id="light">OFF</span></p>
+          </div>
+
+          <!-- Motion Card -->
+          <div class="card">
+              <img src="https://static.vecteezy.com/system/resources/previews/020/195/548/original/running-person-icon-design-free-vector.jpg" alt="Motion">
+              <p><strong>Motion:</strong> <span id="motion">NO Access</span></p>
+          </div>
+
+          <!-- Pump Card -->
+          <div class="card">
+              <img src="https://th.bing.com/th/id/OIP.cQep6DpMwxzyiYRoPrIy2gHaHa" alt="Pump">
+              <p><strong>Pump:</strong> <span id="pump">OFF</span></p>
+          </div>
+
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+          <label>Fan:
+              <select id="fanControl">
+                  <option value="ON">ON</option>
+                  <option value="OFF">OFF</option>
+              </select>
+          </label>
+
+          <label>Light:
+              <select id="lightControl">
+                  <option value="ON">ON</option>
+                  <option value="OFF">OFF</option>
+              </select>
+          </label>
+
+          <label>Pump:
+              <select id="pumpControl">
+                  <option value="ON">ON</option>
+                  <option value="OFF">OFF</option>
+              </select>
+          </label>
+
+          <!-- Update Button -->
+          <button onclick="updateControls()">Update</button>
+      </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1z9RLzdvBP4TBtQGNUGIHAjK9oRSNAeM",
+            authDomain: "smart-green-house-system-4ab5d.firebaseapp.com",
+            databaseURL: "https://smart-green-house-system-4ab5d-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "smart-green-house-system-4ab5d",
+            storageBucket: "smart-green-house-system-4ab5d.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef123456"
+        };
+    
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    
+       // Fetch data from Firebase in real-time and update the UI
+db.ref('/SmartGreenHouse').on('value', (snapshot) => {
+    const data = snapshot.val();
+
+    // Update Temperature
+    document.getElementById('temp').innerText = `${data.Temperature} °C`;
+
+    // Update Humidity
+    document.getElementById('hum').innerText = `${data.Humidity} %`;
+
+    // Update Soil Moisture
+    document.getElementById('soil').innerText = `${data.SoilMoisture} %`;
+
+    // Update Light Status
+    document.getElementById('light').innerText = data.Light === "ON" ? "ON" : "OFF";
+
+    // Update Motion Status
+    document.getElementById('motion').innerText = data.MotionDetected ? "YES" : "NO Access";
+
+    // Update Pump Status
+    document.getElementById('pump').innerText = data.Pump === "ON" ? "ON" : "OFF";
+});
+
+    
+        // Function to update actuator states in Firebase
+        function updateControls() {
+            const fanState = document.getElementById('fanControl').value;
+            const lightState = document.getElementById('lightControl').value;
+            const pumpState = document.getElementById('pumpControl').value;
+    
+            db.ref('/SmartGreenHouse/Fan').set(fanState);
+            db.ref('/SmartGreenHouse/Light').set(lightState);
+            db.ref('/SmartGreenHouse/Pump').set(pumpState);
+        }
+    </script>
+    
